@@ -1,19 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.unicauca.solid.parqueadero.dominio;
 
 import java.util.Date;
 
 /**
  *
- * @author EdynsonMJ
+ * @author Juan Camilo Gonzalez, Edynson Muños Jimenez
  */
 public class RegistroVehiculo {
 
-    //ATRIBUTOS
+    /**
+     * ATRIBUTOS
+     */
     private String placa;
     private String modelo;
     private String propietario;
@@ -22,7 +19,9 @@ public class RegistroVehiculo {
     String tipo;
     private String numTicket;
 
-    //CONSTRUCTORES
+    /**
+     * CONSTRUCTORES
+     */
     public RegistroVehiculo() {
     }
 
@@ -33,6 +32,9 @@ public class RegistroVehiculo {
         this.fechaEntrada = fechaEntrada;
     }
 
+    /**
+     * Getter y Setter
+     */
     public void tipoVehiculo() {
     }
     //SET AND GET

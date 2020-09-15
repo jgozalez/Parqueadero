@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 
 /**
  *
- *@author Juan Camilo Gonzalez, Edynson Muños Jimenez
+ * @author Juan Camilo Gonzalez, Edynson Muños Jimenez
  */
 public class Negocio {
 
@@ -44,22 +44,24 @@ public class Negocio {
         return true;
 
     }
-    
+
     /**
      * lista los vehiculos desde la base de datos
-     * @return 
+     *
+     * @return
      */
-
     public List<RegistroVehiculo> listVehiculo() {
         List<RegistroVehiculo> vehiculos = new ArrayList<>();
         vehiculos = repository.list();
         return vehiculos;
     }
+
     /**
-     * Saca los vehiculos de la base de datos 
+     * Saca los vehiculos de la base de datos
+     *
      * @param fechaSalida
      * @param placa
-     * @return 
+     * @return
      */
 
     public Boolean fijarSalida(String fechaSalida, String placa) {
@@ -68,8 +70,9 @@ public class Negocio {
 
     /**
      * Calcula las horas que el vehiculo estuvo en el parqueadero
+     *
      * @param placa
-     * @return 
+     * @return
      */
     public double calcularCobro(String placa) {
         RegistroVehiculo temporal = new RegistroVehiculo();
@@ -85,13 +88,13 @@ public class Negocio {
             Date fechaEnt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(fechaE);
             Date fechaSal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(fechaS);
             int cantMin = (int) (fechaSal.getTime() - fechaEnt.getTime()) / 60000;
-            if(cantMin<0){
-                cantMin=cantMin*(-1);
+            if (cantMin < 0) {
+                cantMin = cantMin * (-1);
             }
             //System.out.println("tiempo: "+cantMin);
             String tipo = temporal.getTipo();
-            double precio=this.precioReal(tipo, cantMin,temporal.getNumTicket());
-            if(precio==-1){
+            double precio = this.precioReal(tipo, cantMin, temporal.getNumTicket());
+            if (precio == -1) {
                 return -1;
             }
             factura(temporal, precio);
@@ -101,27 +104,31 @@ public class Negocio {
             return -1;
         }
     }
+
     /**
      * Me genera la factura del vehiculo
+     *
      * @param v
-     * @param cobro 
+     * @param cobro
      */
-    private void factura(RegistroVehiculo v, double cobro){
+    private void factura(RegistroVehiculo v, double cobro) {
         System.out.println("FACTURACION");
-        System.out.println("placa: "+v.getPlaca());
-        System.out.println("modelo: "+v.getModelo());
-        System.out.println("propietario: "+v.getPropietario());
-        System.out.println("tipo: "+v.getTipo());
-        System.out.println("fecha entrada: "+v.getFechaEntrada());
-        System.out.println("fecha salida: "+v.getFechaSalida());
-        System.out.println("cobro: "+cobro);
+        System.out.println("placa: " + v.getPlaca());
+        System.out.println("modelo: " + v.getModelo());
+        System.out.println("propietario: " + v.getPropietario());
+        System.out.println("tipo: " + v.getTipo());
+        System.out.println("fecha entrada: " + v.getFechaEntrada());
+        System.out.println("fecha salida: " + v.getFechaSalida());
+        System.out.println("cobro: " + cobro);
     }
+
     /**
      * Saca el precio dependiendo de cada tipo de Vehiculo
+     *
      * @param tipo
      * @param minutos
      * @param ticket
-     * @return 
+     * @return
      */
     private double precioReal(String tipo, int minutos, String ticket) {
         double valor;
@@ -133,29 +140,29 @@ public class Negocio {
             if (minutos > 60) {
                 valor += Math.round((tiempoEnt - 1) * 500);
                 if (tiempoDec > 0) {
-                    valor += Math.round  (500 * (tiempoDec/60));
-                   
+                    valor += Math.round(500 * (tiempoDec / 60));
+
                 }
             }
             return valor;
         }
-        
+
         if (tipo.compareTo("RegistroCarro") == 0) {
             tiempoEnt = (int) (minutos / 60);
             tiempoDec = minutos % 60;
             valor = 2000;
             if (minutos > 60) {
-                valor +=Math.round((tiempoEnt - 1) * 1000);
+                valor += Math.round((tiempoEnt - 1) * 1000);
                 if (tiempoDec > 0) {
-                    valor += Math.round (1000 * (tiempoDec/60));
+                    valor += Math.round(1000 * (tiempoDec / 60));
                 }
             }
             return valor;
         }
         if (tipo.compareTo("RegistroCamion") == 0) {
-            if(this.sorteo().compareTo(ticket)==0){
+            if (this.sorteo().compareTo(ticket) == 0) {
                 System.out.println("ganador!!!");
-                valor=0.0;
+                valor = 0.0;
                 return valor;
             }
             tiempoEnt = (int) (minutos / 1440); //dia
@@ -164,26 +171,28 @@ public class Negocio {
             if ((minutos / 60) <= 12) {
                 valor = 10000.0;
             } else if ((minutos / 60) > 24) {
-                valor +=Math.round((tiempoEnt - 1) * 15000);
+                valor += Math.round((tiempoEnt - 1) * 15000);
                 if (tiempoDec > 0) {
-                    valor += Math.round(15000 * (tiempoDec/1440));
-                    
+                    valor += Math.round(15000 * (tiempoDec / 1440));
+
                 }
-                
+
             }
             return valor;
         }
         return -1;
     }
+
     /**
      * Hace el sorteo si el tiket es igualm al numero el parqueo le sale gratis
-     * @return 
+     *
+     * @return
      */
-    public String sorteo(){
+    public String sorteo() {
         String numString;
-        Integer num=(int)Math.floor(Math.random()*(0-1000+1)+1000);
-        numString=num.toString();
-        System.out.println("resultado sorteo: "+numString);
+        Integer num = (int) Math.floor(Math.random() * (0 - 1000 + 1) + 1000);
+        numString = num.toString();
+        System.out.println("resultado sorteo: " + numString);
         return numString;
     }
 }

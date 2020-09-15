@@ -1,4 +1,3 @@
-
 package co.unicauca.solid.parqueadero.dominio.aceso;
 
 import co.unicauca.solid.parqueadero.dominio.RegistroVehiculo;
@@ -17,41 +16,41 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 /**
  *
  * @author Juan Camilo Gonzalez, Edynson Muños Jimenez
  */
-public class RegistroRepositorio implements IRegistroRepositorio   {
+public class RegistroRepositorio implements IRegistroRepositorio {
 
-    private Integer num=0;
+    private Integer num = 0;
     private Connection conn;
 
     public RegistroRepositorio() {
         initDatabase();
     }
-/**
- * Me guarda en la  base de datos el Vehiculo
- * @param newVehiculo
- * @return 
- */
+
+    /**
+     * Me guarda en la base de datos el Vehiculo
+     *
+     * @param newVehiculo
+     * @return
+     */
     @Override
     public boolean save(RegistroVehiculo newVehiculo) {//fecha entrada
 
         try {
             //Validacion del RegistroVehiculo
-             if (newVehiculo == null  
-                     || newVehiculo.getPlaca().isBlank()
-                     || newVehiculo.getModelo().isBlank() 
-                     || newVehiculo.getModelo().isBlank()
-                     || newVehiculo.getTipo().isBlank()
-                     || newVehiculo.getFechaEntrada().isBlank()) {
-            return false;
-         
+            if (newVehiculo == null
+                    || newVehiculo.getPlaca().isBlank()
+                    || newVehiculo.getModelo().isBlank()
+                    || newVehiculo.getModelo().isBlank()
+                    || newVehiculo.getTipo().isBlank()
+                    || newVehiculo.getFechaEntrada().isBlank()) {
+                return false;
+
             }
             //this.connect();
-            this.num+=1;
+            this.num += 1;
             newVehiculo.setNumTicket(num.toString());
             String sql = "INSERT INTO Vehiculo ( Placa, Modelo , Propietario , Tipo , FechaEntrada, FechaSalida, Ticket) "
                     + "VALUES ( ?, ?, ?, ?, ?, ? ,? )";
@@ -71,10 +70,12 @@ public class RegistroRepositorio implements IRegistroRepositorio   {
         }
         return false;
     }
-/**
- * Me lista los Vehiculos
- * @return 
- */
+
+    /**
+     * Me lista los Vehiculos
+     *
+     * @return
+     */
     @Override
     public List<RegistroVehiculo> list() {//&fecha entrada, &fechaSalida
         List<RegistroVehiculo> vehiculos = new ArrayList<>();
@@ -103,16 +104,18 @@ public class RegistroRepositorio implements IRegistroRepositorio   {
         }
         return vehiculos;
     }
+
     /**
      * Retira el Vehiculo de la base de datos
+     *
      * @param fechaSalida
      * @param placa
-     * @return 
+     * @return
      */
     @Override
-    public boolean retirar(String fechaSalida, String placa){
-        try{
-            if (fechaSalida == null){
+    public boolean retirar(String fechaSalida, String placa) {
+        try {
+            if (fechaSalida == null) {
                 return false;
             }
             String sql = "  UPDATE Vehiculo SET FechaSalida = ? WHERE Placa = ?";
@@ -120,31 +123,34 @@ public class RegistroRepositorio implements IRegistroRepositorio   {
             pstmt.setString(1, fechaSalida);
             pstmt.setString(2, placa);
             pstmt.executeUpdate();
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Negocio.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
+
     /**
      * Me Registra el vehiculo
+     *
      * @param placa
-     * @return 
+     * @return
      */
     @Override
-    public RegistroVehiculo obtenerVehiculo(String placa){
+    public RegistroVehiculo obtenerVehiculo(String placa) {
         List<RegistroVehiculo> vehiculos = new ArrayList<>();
         vehiculos = this.list();
         String str;
-        for(int i=0;i<vehiculos.size();i++){
-            str=vehiculos.get(i).getPlaca();
-            if(str.compareTo(placa)==0){
+        for (int i = 0; i < vehiculos.size(); i++) {
+            str = vehiculos.get(i).getPlaca();
+            if (str.compareTo(placa) == 0) {
                 RegistroVehiculo v = vehiculos.get(i);
                 return v;
             }
         }
         return null;
     }
+
     /**
      * Crea la tabla vehiculo
      */
@@ -153,11 +159,11 @@ public class RegistroRepositorio implements IRegistroRepositorio   {
         String sql = "CREATE TABLE IF NOT EXISTS Vehiculo (\n"
                 + "	Placa text PRIMARY KEY,\n"
                 + "	Modelo text NOT NULL,\n"
-                +"      Propietario text NOT NULL,\n"
-                +"      Tipo text NOT NULL, \n"
-                +"      FechaEntrada text NOT NULL, \n"
-                +"      FechaSalida text, \n"
-                +"      Ticket text \n"
+                + "      Propietario text NOT NULL,\n"
+                + "      Tipo text NOT NULL, \n"
+                + "      FechaEntrada text NOT NULL, \n"
+                + "      FechaSalida text, \n"
+                + "      Ticket text \n"
                 + ");";
 
         try {
